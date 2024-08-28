@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Edit Admin</title>
+    <!-- BOOTSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- GOOGLE MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <!-- Dedicated CSS -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/attendance.css">
+</head>
+<body>
+    <div th:replace="/layout/header :: header"></div>
+    <div class="d-flex">
+        <div th:replace="/layout/sidemenu :: sidemenu"></div>
+        <form th:action="@{/Admin/attendance/update}" class="content-details" th:object="${attendanceWDTO}" method="post">
+             <div class="text-center">
+                <h2 class="mt-2 mb-5">Attendance Details</h2>
+            </div>
+            
+             <div class="d-flex">
+            	<div class="d-block">
+            	<div class="d-flex">
+            	<input type="hidden" name="employee_id" th:value="*{employee_id}"/>
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2">
+                    <p>Clock In:</p>
+                </div>
+               
+               <input type="text" name="clockin" th:value="*{clockin}" class=" ps-2" />
+                </div>
+               <div class="errorMSG mt-2" role="alert" th:if="${attendanceClockIn != null}" th:text="${attendanceClockIn}"></div> 
+                </div>
+                
+                <div class="d-block ms-4" >
+                <div class="d-flex">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2">
+                    <p>Break In:</p>
+                </div>
+                <input type="text" name="breakin" th:value="*{breakin}" class="task-add-input ps-2 me-4" />
+                </div>
+                <div class="errorMSG mt-2" role="alert" th:if="${attendanceBreakIn != null}" th:text="${attendanceBreakIn}"> </div> 
+                </div>
+            
+                <div class="d-block">
+                <div class="d-flex">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2">
+                    <p>Break Out:</p>
+                </div>
+                <input type="text" name="breaskout" th:value="*{breaskout}" class="task-add-input ps-2" />
+            	</div>
+            	<div class="errorMSG mt-2" role="alert" th:if="${attendanceBreakOut != null}" th:text="${attendanceBreakOut}"> </div>
+                </div>
+                </div>
+            	
+            
+             <div class="d-flex mt-3">
+            	<div class="d-block">
+            	<div class="d-flex">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2">
+                    <p>Clock Out:</p>
+                </div>
+                <input type="text" name="clockout" th:value="*{clockout}" class="task-add-input ps-2" />
+            	</div>
+            	<div class="errorMSG" role="alert" th:if="${attendanceClockOut != null}" th:text="${attendanceClockOut}"></div>
+            	</div>
+            
+            
+            	<div class="d-block task-add-input-select">
+                <div class="d-flex">
+                
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2 ms-4">
+                    <p>Status:</p>
+                </div>
+                
+                <select name="status" class=" ps-2 me-4" th:value="*{status}">
+                	<option class="ps-2 me-5"  >In Progress</option>
+                	<option class="ps-2 me-5"  >Accepted</option>
+                </select>
+                
+                
+                
+              
+            	</div>
+            	<div class="errorMSG" role="alert" th:if="${statusErrorMsg != null}" th:text="${statusErrorMsg}"></div>
+           		</div>
+           
+           
+
+                <div class="d-flex  ms-3">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2">
+                    <p>Date:</p>
+                </div>
+                <input type="text" name="date" th:value="*{date}" class="task-add-input ps-2" readonly/>
+                </div>
+            </div>
+           
+           
+         <div class="d-flex mt-3">
+            <div class="d-flex">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2">
+                    <p>Break Hours:</p>
+                </div>
+                <input type="text" name="breakhours" th:value="*{breakhours}" class="task-add-input ps-2" readonly/>
+            </div>
+
+          <div class="d-flex">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2 ms-4">
+                    <p>Total Work Hours:</p>
+                </div>
+                <input type="text" name="attendancehours" th:value="*{attendancehours}" class="task-add-input ps-2" readonly/>
+            </div>
+			
+			                        
+            <div class="d-flex">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2 ms-4">
+                    <p>Total Over Time:</p>
+                </div>
+                <input type="text" name="overtime" th:value="*{overtime}" class="task-add-input ps-2" readonly/>
+            </div>
+          </div>
+          
+           <div class="d-flex mt-3">
+                <div class="task-label-background d-flex align-items-end ps-4 pb-2 ">
+                    <p>Total Late Hours:</p>
+                </div>
+                <input type="text" name="latehours" th:value="*{latehours}" class="task-add-input ps-2 " readonly/>
+            </div>            
+            
+            
+            
+            <div class="d-flex justify-content-center mt-5">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <input type="hidden" name="attendance_id" th:value="*{attendance_id}"/>
+                 <input type="hidden" name="firstName" th:value="*{firstName}"/>
+                  <input type="hidden" name="lastName" th:value="*{lastName}"/>
+            </div> 
+        </form>
+    </div>
+    <div th:replace="/layout/footer :: footer"></div>
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
+</html>

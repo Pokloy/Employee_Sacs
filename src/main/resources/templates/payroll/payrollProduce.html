@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- BOOTSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- GOOGLE MATERIAL ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <!-- Dedicated CSS -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/attendance.css">
+    <title>Payroll Daily Pay</title>
+</head>
+<body>
+    <div th:replace="/layout/header :: header"></div>
+    <div class="d-flex" >
+        <div th:replace="/layout/sidemenu :: sidemenu"></div>
+        <div class="content d-block text-center"  th:object="${payrollWebDto}">
+            <div class="mb-2">
+                <h1>Payroll Produce</h1>
+            </div>
+            
+            <div class="errorMSG" role="alert" th:if="${payrollMsgErrorName != null}" th:text="${payrollMsgErrorName}"></div> 
+            
+            <div class="d-block text-start">
+            <p class="m-2">Date to be covered: </p>
+            
+            <form method="post" class="d-flex" th:action="@{/Admin/payroll/search-dailypay}">
+           	<input type="hidden" name="employee_id" id="employee_id" th:value="${employeeIdController}" />
+             <input type="text" name="date_cover_start" placeholder="Enter Date Start" class="dateInputPayroll mt-1 mx-2" th:value="${date_cover_start}"/> 
+              <input type="text" name="date_cover_end" placeholder="Enter Date Start" class="dateInputPayroll mt-1 mx-2" th:value="${date_cover_end}"/> 
+              <input type="hidden" name="sPayrollId" th:value="${sPayrollId}"></input>
+           	<button type="submit" class="btn btn-primary edit-btn mx-2" >Calculate Payroll</button> 
+            </form>
+
+            <form method="get" class="d-flex" th:action="@{/Admin/payroll/redirect-list}">
+           <input type="hidden" name="employee_id" id="employee_id" th:value="${employeeIdController}" /> 
+
+           	<input type="submit" class="btn btn-primary edit-btn mx-2" value="Reset" />
+            </form>
+            
+            </div>
+            
+            <div class="d-flex justify-content-center">
+                <table class="table-main mt-4 table-width">
+                    <thead>
+                        <tr>
+                            <th>Attendance Hours</th>
+                            <th>Daily Pay</th>
+                            <th>Over Time Hours</th>
+                            <th>Over Time Pay</th>
+                            <th>Late Hours</th>
+                            <th>Late Deductions</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                     <tbody>
+                        <tr th:each="AandDList : *{attendanceDailyPayObj}">
+                            <!-- <td th:text="${AandDList.date_cover_start + ' >> ' + payrollList.date_cover_end}"></td -->
+                            <td th:text="${AandDList.attendancehours}"></td>
+                            <td th:text="${AandDList.regulardaily}"></td>
+                            <td th:text="${AandDList.latehours}"></td>
+                            <td th:text="${AandDList.latedaily}"></td>
+                            <td th:text="${AandDList.overtime}"></td>
+                            <td th:text="${AandDList.overtimedaily}"></td>
+                            <td th:text="${AandDList.date}"></td>
+                        </tr>
+                    </tbody> 
+                </table>           
+                
+            </div>
+            
+            <div class="d-flex justify-content-center" >
+                <table class="table-main mt-4 table-width">
+                    <thead>
+                        <tr>                            
+                        	<th></th>
+                        	<th>Attendance Hours</th>
+                            <th>Daily Pay</th>
+                            <th>Over Time Hours</th>
+                            <th>Over Time Pay</th>
+                            <th>Late Hours</th>
+                            <th>Late Deductions</th>
+                            <th>Date Produced</th>
+                        </tr>
+                    </thead>
+                     <tbody>
+                        <tr>
+                            <!-- <td th:text="${AandDList.date_cover_start + ' >> ' + payrollList.date_cover_end}"></td -->
+                           	 <td>Total Results: </td>
+                            <td th:text="${totalRegularHours}"></td>
+                            <td th:text="${totalRegularPay}"></td>
+                            <td th:text="${totalLateHours}"></td>
+                            <td th:text="${totalLateDeduction}"></td>
+                            <td th:text="${totalOverTimeHours}"></td>
+                            <td th:text="${totalOvertimePay}"></td>
+                            <td th:text="${currentDate}"></td>
+                        </tr>
+                    </tbody> 
+                </table>  
+                </div>   
+            <form method="post" th:action="@{/Admin/payroll/details-payroll}">  
+             	   <input type="submit" class="btn btn-primary edit-btn mt-4" value="See Payroll Details" />
+             	    <input type="hidden" name="employeeId" th:value="${employeeId}"></input>
+             	   <input type="hidden" name="totalRegularPay" th:value="${totalRegularPay}"></input>
+             	   <input type="hidden" name="totalLateDeduction" th:value="${totalLateDeduction}"></input>
+             	   <input type="hidden" name="totalOvertimePay" th:value="${totalOvertimePay}"></input>
+             	   <input type="hidden" name="dateFrom" th:value="${dateFrom}"></input>
+             	   <input type="hidden" name="dateTo" th:value="${dateTo}"></input>
+           			<input type="hidden" name="numberOfdays" th:value="${numberOfdays}"></input>
+           			<input type="hidden" name="sPayrollId" th:value="${sPayrollId}"></input>
+            </form>  
+                
+        </div>
+    </div>
+    <div th:replace="/layout/footer :: footer"></div>
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
+</html>
